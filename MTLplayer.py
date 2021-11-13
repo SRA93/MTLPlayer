@@ -38,19 +38,25 @@ def stop():
 
     #Global pause variable
 
-    global paused
+global paused
+paused = False
 
 
     # Pause\unpause current song
 
-def pause():
-    #pause
-    pygame.mixer.music.pause()
-    playlist.selection_clear(ACTIVE)
+def pause(is_paused):
+    global paused
+    paused = is_paused
 
-    #unpause
-    pygame.mixer.music.unpause()
-    playlist.selection_clear(ACTIVE)
+    if paused:
+        # unpause
+        pygame.mixer.music.unpause()
+        paused = False
+    else:
+       #pause
+        pygame.mixer.music.pause()
+        paused = True
+
 
 
 #playlist
@@ -75,7 +81,7 @@ control_frame.pack()
 next_btn = Button(control_frame, image=next_btn_img, borderwidth=0)
 prev_btn = Button(control_frame, image=prev_btn_img, borderwidth=0)
 stop_btn = Button(control_frame, image=stop_btn_img, borderwidth=0, command=stop)
-pause_btn = Button(control_frame, image=pause_btn_img, borderwidth=0, command=pause)
+pause_btn = Button(control_frame, image=pause_btn_img, borderwidth=0, command=lambda: pause(paused))
 play_btn = Button(control_frame, image=play_btn_img, borderwidth=0, command=play)
 
 next_btn.grid(row=0, column=4, padx=5)
