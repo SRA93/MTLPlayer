@@ -21,6 +21,17 @@ def add_song():
     #add song to playlist
     playlist.insert(END, song)
 
+# add multiple songs function
+def add_multi_songs():
+    songs = filedialog.askopenfilenames(initialdir='audio/', title='Выберите треки', filetypes=(('mp3 Files', '*.mp3'),))
+#directory and file info replace
+    for song in songs:
+        song = song.replace("C:/Users/Uzver-PC/PycharmProjects/pythonProject3/audio/", "")
+        song = song.replace(".mp3", "")
+        #insert into playlist
+        playlist.insert(END, song)
+
+
     #play song
 
 def play():
@@ -36,7 +47,49 @@ def stop():
     pygame.mixer.music.stop()
     playlist.selection_clear(ACTIVE)
 
-    #Global pause variable
+    #Next track function
+
+def next_track():
+    next = playlist.curselection()
+    next = next[0]+1
+    song = playlist.get(next)
+    song = f'C:/Users/Uzver-PC/PycharmProjects/pythonProject3/audio/{song}.mp3'
+
+    pygame.mixer.music.load(song)
+    pygame.mixer.music.play(loops=0)
+
+    playlist.selection_clear(0, END)
+    playlist.activate(next)
+    playlist.selection_set(next, last=None)
+
+    #Previous track function
+
+def prev_track():
+    prev = playlist.curselection()
+    prev = prev[0] - 1
+    song = playlist.get(prev)
+    song = f'C:/Users/Uzver-PC/PycharmProjects/pythonProject3/audio/{song}.mp3'
+
+    pygame.mixer.music.load(song)
+    pygame.mixer.music.play(loops=0)
+
+    playlist.selection_clear(0, END)
+    playlist.activate(prev)
+    playlist.selection_set(prev, last=None)
+
+    #Delete track from playlist
+
+def delete_track():
+    playlist.delete(ANCHOR)
+    pygame.mixer.music.stop()
+
+def delete_many_tracks():
+    playlist.delete(0,END)
+    pygame.mixer.music.stop()
+
+
+
+#Global pause variable
 
 global paused
 paused = False
@@ -78,8 +131,8 @@ control_frame.pack()
 
 #player buttons control
 
-next_btn = Button(control_frame, image=next_btn_img, borderwidth=0)
-prev_btn = Button(control_frame, image=prev_btn_img, borderwidth=0)
+next_btn = Button(control_frame, image=next_btn_img, borderwidth=0, command=next_track)
+prev_btn = Button(control_frame, image=prev_btn_img, borderwidth=0, command=prev_track)
 stop_btn = Button(control_frame, image=stop_btn_img, borderwidth=0, command=stop)
 pause_btn = Button(control_frame, image=pause_btn_img, borderwidth=0, command=lambda: pause(paused))
 play_btn = Button(control_frame, image=play_btn_img, borderwidth=0, command=play)
@@ -95,11 +148,22 @@ play_btn.grid(row=0, column=2, padx=5)
 player_menu = Menu(window)
 window.config(menu=player_menu)
 
+#Delete menu
+remove_track_menu = Menu(player_menu)
+player_menu.add_cascade(label='Удалить из плейлиста', menu=remove_track_menu)
+remove_track_menu.add_command(label='Удалить один трек из плейлиста', command=delete_track)
+remove_track_menu.add_command(label='Удалить все треки из плейлиста', command=delete_many_tracks)
+
+
 #Add Song menu
 
 add_song_menu = Menu(player_menu)
-player_menu.add_cascade(label='Добавить треки', menu=add_song_menu)
+player_menu.add_cascade(label='Добавить трек(и)', menu=add_song_menu)
 add_song_menu.add_command(label='Добавить один трек в плейлист', command=add_song)
+
+#Add Multiple Song menu
+add_song_menu.add_command(label='Добавить несколько треков в плейлист', command=add_multi_songs)
+
 
 
 
