@@ -3,11 +3,12 @@ import pygame
 from tkinter import filedialog
 import time
 from mutagen.mp3 import MP3
+import tkinter.ttk as ttk
 
 window = Tk()
 window.title("MTLPlayer v. 0.1")
 window.iconbitmap('C:/Users/Uzver-PC/PycharmProjects/pythonProject3/MTLPlayer.ico')
-window.geometry('600x350')
+window.geometry('600x450')
 
 #mixer init
 pygame.mixer.init()
@@ -26,12 +27,15 @@ def play_time():
     #Load song with mutagen
     muta_song = MP3(song)
     #Get song lenght
+    global song_lenght
     song_lenght = muta_song.info.length
     # Converted to time format
     converted_song_lenght = time.strftime('%M:%S', time.gmtime(song_lenght))
 
     #Output time in statusbar
     time_bar.config(text=f'Прослушано: {converted_time} из {converted_song_lenght} ')
+    # Update slider position to current song position
+    slider.config(value=current_time)
     #Update time info
     time_bar.after(1000, play_time)
 
@@ -67,9 +71,14 @@ def play():
     pygame.mixer.music.load(song)
     pygame.mixer.music.play(loops=0)
 
-    #Call play_time function to get track lenght
+    # Call play_time function to get track lenght
 
     play_time()
+
+    # Update slider position
+    slider_position = int(song_lenght)
+    slider.config(to=slider_position, value=0)
+
 
 
     # Stop playing song
@@ -144,7 +153,9 @@ def pause(is_paused):
         pygame.mixer.music.pause()
         paused = True
 
-
+#Creat slider function
+def slide(x):
+    slider_label.config(text=f'{int(slider.get())} из {int(song_lenght)}')
 
 #playlist
 playlist = Listbox(window, bg="white", fg="black", width=60, selectbackground='gray')
@@ -202,8 +213,13 @@ add_song_menu.add_command(label='Добавить несколько треко�
 time_bar = Label(window, text='', bd=1, relief=GROOVE, anchor=E)
 time_bar.pack(fill=X, side=BOTTOM, ipady=2)
 
+#Create position slider
+slider = ttk.Scale(window, from_=0, to=100, orient=HORIZONTAL, value=0, command=slide, length=360)
+slider.pack(pady=15)
 
-
+#Create temporary slider label
+slider_label=Label(window, text='0')
+slider_label.pack(pady=17)
 
 
 
