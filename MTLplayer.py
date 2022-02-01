@@ -5,10 +5,18 @@ from tkinter import filedialog
 window = Tk()
 window.title("MTLPlayer v. 0.1")
 window.iconbitmap('C:/Users/Uzver-PC/PycharmProjects/pythonProject3/MTLPlayer.ico')
-window.geometry('600x300')
+window.geometry('600x350')
 
 #mixer init
 pygame.mixer.init()
+
+#Song lenght time info
+def play_time():
+    current_time = pygame.mixer.music.get_pos()
+    time_bar.config(text=current_time)
+    #Update time info
+    time_bar.after(1000, play_time)
+
 
 #add song function
 def add_song():
@@ -40,6 +48,11 @@ def play():
 
     pygame.mixer.music.load(song)
     pygame.mixer.music.play(loops=0)
+
+    #Call play_time function to get track lenght
+
+    play_time()
+
 
     # Stop playing song
 
@@ -151,7 +164,7 @@ window.config(menu=player_menu)
 #Delete menu
 remove_track_menu = Menu(player_menu)
 player_menu.add_cascade(label='Удалить из плейлиста', menu=remove_track_menu)
-remove_track_menu.add_command(label='Удалить один трек из плейлиста', command=delete_track)
+remove_track_menu.add_command(label='Удалить текущий трек из плейлиста', command=delete_track)
 remove_track_menu.add_command(label='Удалить все треки из плейлиста', command=delete_many_tracks)
 
 
@@ -163,6 +176,10 @@ add_song_menu.add_command(label='Добавить один трек в плей�
 
 #Add Multiple Song menu
 add_song_menu.add_command(label='Добавить несколько треков в плейлист', command=add_multi_songs)
+
+#Create Duration bar
+time_bar = Label(window, text='', bd=1, relief=GROOVE, anchor=E)
+time_bar.pack(fill=X, side=BOTTOM, ipady=2)
 
 
 
