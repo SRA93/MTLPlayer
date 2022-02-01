@@ -2,6 +2,7 @@ from tkinter import *
 import pygame
 from tkinter import filedialog
 import time
+from mutagen.mp3 import MP3
 
 window = Tk()
 window.title("MTLPlayer v. 0.1")
@@ -13,12 +14,24 @@ pygame.mixer.init()
 
 #Song lenght time info
 def play_time():
-    #Read elapsed time
+    #Get elapsed time
     current_time = pygame.mixer.music.get_pos() / 1000
     #Current_time in time format
-    converted_time = time.strftime('%H:%M:%S', time.gmtime(current_time))
+    converted_time = time.strftime('%M:%S', time.gmtime(current_time))
+
+    #Get currently played song
+    #current_song = playlist.curselection()
+    song = playlist.get(ACTIVE)
+    song = f'C:/Users/Uzver-PC/PycharmProjects/pythonProject3/audio/{song}.mp3'
+    #Load song with mutagen
+    muta_song = MP3(song)
+    #Get song lenght
+    song_lenght = muta_song.info.length
+    # Converted to time format
+    converted_song_lenght = time.strftime('%M:%S', time.gmtime(song_lenght))
+
     #Output time in statusbar
-    time_bar.config(text=converted_time)
+    time_bar.config(text=f'Прослушано: {converted_time} из {converted_song_lenght} ')
     #Update time info
     time_bar.after(1000, play_time)
 
@@ -64,6 +77,9 @@ def play():
 def stop():
     pygame.mixer.music.stop()
     playlist.selection_clear(ACTIVE)
+
+    #Clear status bar
+    time_bar.config(text='')
 
     #Next track function
 
