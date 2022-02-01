@@ -35,7 +35,8 @@ def play_time():
     #Output time in statusbar
     time_bar.config(text=f'Прослушано: {converted_time} из {converted_song_lenght} ')
     # Update slider position to current song position
-    slider.config(value=current_time)
+    slider.config(value=int(current_time))
+
     #Update time info
     time_bar.after(1000, play_time)
 
