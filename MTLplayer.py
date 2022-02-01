@@ -1,6 +1,7 @@
 from tkinter import *
 import pygame
 from tkinter import filedialog
+import time
 
 window = Tk()
 window.title("MTLPlayer v. 0.1")
@@ -12,8 +13,12 @@ pygame.mixer.init()
 
 #Song lenght time info
 def play_time():
-    current_time = pygame.mixer.music.get_pos()
-    time_bar.config(text=current_time)
+    #Read elapsed time
+    current_time = pygame.mixer.music.get_pos() / 1000
+    #Current_time in time format
+    converted_time = time.strftime('%H:%M:%S', time.gmtime(current_time))
+    #Output time in statusbar
+    time_bar.config(text=converted_time)
     #Update time info
     time_bar.after(1000, play_time)
 
