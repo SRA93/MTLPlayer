@@ -17,6 +17,7 @@ pygame.mixer.init()
 def play_time():
     #Get elapsed time
     current_time = pygame.mixer.music.get_pos() / 1000
+    slider_label.config(text=f'Slider: {int(slider.get())} and Song Position: {int(current_time)}')
     #Current_time in time format
     converted_time = time.strftime('%M:%S', time.gmtime(current_time))
 
@@ -32,10 +33,34 @@ def play_time():
     # Converted to time format
     converted_song_lenght = time.strftime('%M:%S', time.gmtime(song_lenght))
 
+    #Increase current time by 1 sec
+    current_time += 1
+
+    if int(slider.get()) == int(song_lenght):
+        time_bar.config(text=f'Прослушано: {converted_song_lenght} ')
+
+    elif int(slider.get()) == int(current_time):
+        slider_position = int(song_lenght)
+        slider.config(to=slider_position, value=int(current_time))
+
+    else:
+        slider_position = int(song_lenght)
+        slider.config(to=slider_position, value=int(slider.get()))
+
+        converted_time = time.strftime('%M:%S', time.gmtime(int(slider.get())))
+        time_bar.config(text=f'Прослушано: {converted_time} из {converted_song_lenght} ')
+
+        # Moving by one sec
+        next_time = int(slider.get()) + 1
+        slider.config(value=next_time)
+
+
     #Output time in statusbar
-    time_bar.config(text=f'Прослушано: {converted_time} из {converted_song_lenght} ')
-    # Update slider position to current song position
-    slider.config(value=int(current_time))
+    #time_bar.config(text=f'Прослушано: {converted_time} из {converted_song_lenght} ')
+
+    #Update slider position to current song position
+
+    #slider.config(to=slider_position, value=int(current_time))
 
     #Update time info
     time_bar.after(1000, play_time)
@@ -77,8 +102,8 @@ def play():
     play_time()
 
     # Update slider position
-    slider_position = int(song_lenght)
-    slider.config(to=slider_position, value=0)
+    #slider_position = int(song_lenght)
+    #slider.config(to=slider_position, value=0)
 
 
 
@@ -156,7 +181,14 @@ def pause(is_paused):
 
 #Creat slider function
 def slide(x):
-    slider_label.config(text=f'{int(slider.get())} из {int(song_lenght)}')
+    #slider_label.config(text=f'{int(slider.get())} из {int(song_lenght)}')
+    song = playlist.get(ACTIVE)
+    song = f'C:/Users/Uzver-PC/PycharmProjects/pythonProject3/audio/{song}.mp3'
+
+    pygame.mixer.music.load(song)
+    pygame.mixer.music.play(loops=0, start=int(slider.get()))
+
+
 
 #playlist
 playlist = Listbox(window, bg="white", fg="black", width=60, selectbackground='gray')
