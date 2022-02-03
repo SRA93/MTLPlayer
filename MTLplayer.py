@@ -15,9 +15,12 @@ pygame.mixer.init()
 
 #Song lenght time info
 def play_time():
+    # Check for double timing
+    if stopped:
+        return
     #Get elapsed time
     current_time = pygame.mixer.music.get_pos() / 1000
-    slider_label.config(text=f'Slider: {int(slider.get())} and Song Position: {int(current_time)}')
+    #slider_label.config(text=f'Slider: {int(slider.get())} and Song Position: {int(current_time)}')
     #Current_time in time format
     converted_time = time.strftime('%M:%S', time.gmtime(current_time))
 
@@ -38,6 +41,9 @@ def play_time():
 
     if int(slider.get()) == int(song_lenght):
         time_bar.config(text=f'Прослушано: {converted_song_lenght} ')
+
+    elif paused:
+        pass
 
     elif int(slider.get()) == int(current_time):
         slider_position = int(song_lenght)
@@ -91,6 +97,9 @@ def add_multi_songs():
     #play song
 
 def play():
+    # Set stopped variable to false to song play
+    global stopped
+    stopped = False
     song = playlist.get(ACTIVE)
     song = f'C:/Users/Uzver-PC/PycharmProjects/pythonProject3/audio/{song}.mp3'
 
@@ -108,17 +117,29 @@ def play():
 
 
     # Stop playing song
-
+global stopped
+stopped = False
 def stop():
+    # Reset time bar and slider
+    time_bar.config(text='')
+    slider.config(value=0)
+    # Stop playing
     pygame.mixer.music.stop()
     playlist.selection_clear(ACTIVE)
 
-    #Clear status bar
+    # Clear status bar
     time_bar.config(text='')
+
+    # Set stop variable to TRUE
+    global stopped
+    stopped = True
 
     #Next track function
 
 def next_track():
+    # Reset time bar and slider
+    time_bar.config(text='')
+    slider.config(value=0)
     next = playlist.curselection()
     next = next[0]+1
     song = playlist.get(next)
@@ -134,6 +155,9 @@ def next_track():
     #Previous track function
 
 def prev_track():
+    # Reset time bar and slider
+    time_bar.config(text='')
+    slider.config(value=0)
     prev = playlist.curselection()
     prev = prev[0] - 1
     song = playlist.get(prev)
@@ -149,10 +173,12 @@ def prev_track():
     #Delete track from playlist
 
 def delete_track():
+    stop()
     playlist.delete(ANCHOR)
     pygame.mixer.music.stop()
 
 def delete_many_tracks():
+    stop()
     playlist.delete(0,END)
     pygame.mixer.music.stop()
 
@@ -251,8 +277,8 @@ slider = ttk.Scale(window, from_=0, to=100, orient=HORIZONTAL, value=0, command=
 slider.pack(pady=15)
 
 #Create temporary slider label
-slider_label=Label(window, text='0')
-slider_label.pack(pady=17)
+#slider_label=Label(window, text='0')
+#slider_label.pack(pady=17)
 
 
 
