@@ -8,7 +8,7 @@ import tkinter.ttk as ttk
 window = Tk()
 window.title("MTLPlayer v. 0.1")
 window.iconbitmap('C:/Users/Uzver-PC/PycharmProjects/pythonProject3/MTLPlayer.ico')
-window.geometry('600x450')
+window.geometry('500x400')
 
 #mixer init
 pygame.mixer.init()
@@ -115,6 +115,11 @@ def play():
     #slider.config(to=slider_position, value=0)
 
 
+    # Get current volume
+    #current_volume = pygame.mixer.music.get_volume()
+    #slider_label.config(text=current_volume * 100)
+
+
 
     # Stop playing song
 global stopped
@@ -205,7 +210,7 @@ def pause(is_paused):
         pygame.mixer.music.pause()
         paused = True
 
-#Creat slider function
+#Create slider function
 def slide(x):
     #slider_label.config(text=f'{int(slider.get())} из {int(song_lenght)}')
     song = playlist.get(ACTIVE)
@@ -214,26 +219,41 @@ def slide(x):
     pygame.mixer.music.load(song)
     pygame.mixer.music.play(loops=0, start=int(slider.get()))
 
+# Create volume function
+def volume(x):
+    pygame.mixer.music.set_volume(volume_slider.get())
+
+# Get current volume
+    #current_volume = pygame.mixer.music.get_volume()
+    #slider_label.config(text=current_volume * 100)
+
+# Create master frame
+master_frame = Frame(window)
+master_frame.pack(pady=20)
+
+# Create playlist box
+playlist = Listbox(master_frame, bg="white", fg="black", width=60, selectbackground='gray')
+playlist.grid(row=0, column=0)
 
 
-#playlist
-playlist = Listbox(window, bg="white", fg="black", width=60, selectbackground='gray')
-playlist.pack(pady=20)
-
-
-#player buttons images
+# Player buttons images
 next_btn_img = PhotoImage(file='icons/next.png')
 prev_btn_img = PhotoImage(file='icons/prev.png')
 stop_btn_img = PhotoImage(file='icons/stop.png')
 pause_btn_img = PhotoImage(file='icons/pause.png')
 play_btn_img = PhotoImage(file='icons/play.png')
 
-#player control frame
+# Player control frame
 
-control_frame = Frame(window)
-control_frame.pack()
+control_frame = Frame(master_frame)
+control_frame.grid(row=1, column=0, pady=20)
 
-#player buttons control
+# Player volume frame
+
+volume_frame = LabelFrame(master_frame, text="Громкость")
+volume_frame.grid(row=0, column=1, padx=10)
+
+# player buttons control
 
 next_btn = Button(control_frame, image=next_btn_img, borderwidth=0, command=next_track)
 prev_btn = Button(control_frame, image=prev_btn_img, borderwidth=0, command=prev_track)
@@ -247,46 +267,44 @@ stop_btn.grid(row=0, column=1, padx=5)
 pause_btn.grid(row=0, column=3, padx=5)
 play_btn.grid(row=0, column=2, padx=5)
 
-#menu
+# menu
 
 player_menu = Menu(window)
 window.config(menu=player_menu)
 
-#Delete menu
+# Delete menu
 remove_track_menu = Menu(player_menu)
 player_menu.add_cascade(label='Удалить из плейлиста', menu=remove_track_menu)
 remove_track_menu.add_command(label='Удалить текущий трек из плейлиста', command=delete_track)
 remove_track_menu.add_command(label='Удалить все треки из плейлиста', command=delete_many_tracks)
 
 
-#Add Song menu
+# Add Song menu
 
 add_song_menu = Menu(player_menu)
 player_menu.add_cascade(label='Добавить трек(и)', menu=add_song_menu)
 add_song_menu.add_command(label='Добавить один трек в плейлист', command=add_song)
 
-#Add Multiple Song menu
+# Add Multiple Song menu
 add_song_menu.add_command(label='Добавить несколько треков в плейлист', command=add_multi_songs)
 
-#Create Duration bar
+# Create Duration bar
 time_bar = Label(window, text='', bd=1, relief=GROOVE, anchor=E)
 time_bar.pack(fill=X, side=BOTTOM, ipady=2)
 
-#Create position slider
-slider = ttk.Scale(window, from_=0, to=100, orient=HORIZONTAL, value=0, command=slide, length=360)
-slider.pack(pady=15)
+# Create position slider
+slider = ttk.Scale(master_frame, from_=0, to=100, orient=HORIZONTAL, value=0, command=slide, length=360)
+slider.grid(row=2, column=0, pady=10)
 
-#Create temporary slider label
-#slider_label=Label(window, text='0')
+# Create volume slider
+volume_slider = ttk.Scale(volume_frame, from_=0, to=1, orient=VERTICAL, value=1, command=volume, length=125)
+volume_slider.pack(pady=10)
+
+
+
+# Create temporary slider label
+#slider_label = Label(window, text='0')
 #slider_label.pack(pady=17)
-
-
-
-
-
-
-
-
 
 
 
