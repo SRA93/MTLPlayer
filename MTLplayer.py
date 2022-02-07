@@ -8,7 +8,7 @@ import tkinter.ttk as ttk
 window = Tk()
 window.title("MTLPlayer v. 0.1")
 window.iconbitmap('C:/Users/Uzver-PC/PycharmProjects/pythonProject3/MTLPlayer.ico')
-window.geometry('500x400')
+window.geometry('520x400')
 
 #mixer init
 pygame.mixer.init()
@@ -119,7 +119,25 @@ def play():
     #current_volume = pygame.mixer.music.get_volume()
     #slider_label.config(text=current_volume * 100)
 
+    # Get current volume
+    current_volume = pygame.mixer.music.get_volume()
 
+    # Times by 100 to make it easier to work
+    current_volume = current_volume * 100
+
+    # slider_label.config(text=current_volume * 100)
+
+    # Change volume graph image
+    if int(current_volume) < 1:
+        volume_graph.config(image=vol0)
+    elif int(current_volume) > 0 and int(current_volume) <= 25:
+        volume_graph.config(image=vol1)
+    elif int(current_volume) >= 25 and int(current_volume) <= 50:
+        volume_graph.config(image=vol2)
+    elif int(current_volume) >= 50 and int(current_volume) <= 75:
+        volume_graph.config(image=vol3)
+    elif int(current_volume) >= 75 and int(current_volume) <= 100:
+        volume_graph.config(image=vol4)
 
     # Stop playing song
 global stopped
@@ -224,15 +242,34 @@ def volume(x):
     pygame.mixer.music.set_volume(volume_slider.get())
 
 # Get current volume
-    #current_volume = pygame.mixer.music.get_volume()
+    current_volume = pygame.mixer.music.get_volume()
+
+    #Times by 100 to make it easier to work
+    current_volume = current_volume * 100
+
     #slider_label.config(text=current_volume * 100)
+
+    # Change volume graph image
+    if int(current_volume) < 1:
+        volume_graph.config(image=vol0)
+    elif int(current_volume) > 0 and int(current_volume) <= 25:
+        volume_graph.config(image=vol1)
+    elif int(current_volume) >= 25 and int(current_volume) <= 50:
+        volume_graph.config(image=vol2)
+    elif int(current_volume) >= 50 and int(current_volume) <= 75:
+        volume_graph.config(image=vol3)
+    elif int(current_volume) >= 75 and int(current_volume) <= 100:
+        volume_graph.config(image=vol4)
+
+
+
 
 # Create master frame
 master_frame = Frame(window)
 master_frame.pack(pady=20)
 
 # Create playlist box
-playlist = Listbox(master_frame, bg="white", fg="black", width=60, selectbackground='gray')
+playlist = Listbox(master_frame, bg="black", fg="orange", width=60, selectbackground='blue')
 playlist.grid(row=0, column=0)
 
 
@@ -243,15 +280,32 @@ stop_btn_img = PhotoImage(file='icons/stop.png')
 pause_btn_img = PhotoImage(file='icons/pause.png')
 play_btn_img = PhotoImage(file='icons/play.png')
 
+# Volume slider level images
+global vol0
+global vol1
+global vol2
+global vol3
+global vol4
+vol0 = PhotoImage(file='icons/volume0.png')
+vol1 = PhotoImage(file='icons/volume1.png')
+vol2 = PhotoImage(file='icons/volume2.png')
+vol3 = PhotoImage(file='icons/volume3.png')
+vol4 = PhotoImage(file='icons/volume4.png')
+
 # Player control frame
 
 control_frame = Frame(master_frame)
 control_frame.grid(row=1, column=0, pady=20)
 
+# Create volume level images frame
+
+volume_graph = Label(master_frame, image=vol0)
+volume_graph.grid(row=1, column=1, padx=10)
+
 # Player volume frame
 
 volume_frame = LabelFrame(master_frame, text="Громкость")
-volume_frame.grid(row=0, column=1, padx=10)
+volume_frame.grid(row=0, column=1, padx=30)
 
 # player buttons control
 
