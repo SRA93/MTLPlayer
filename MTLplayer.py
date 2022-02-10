@@ -27,7 +27,7 @@ def play_time():
     #Get currently played song
     #current_song = playlist.curselection()
     song = playlist.get(ACTIVE)
-    song = f'C:/Users/Uzver-PC/PycharmProjects/pythonProject3/audio/{song}.mp3'
+    song = f'{song}.mp3'
     #Load song with mutagen
     muta_song = MP3(song)
     #Get song lenght
@@ -74,7 +74,7 @@ def play_time():
 
 #add song function
 def add_song():
-    song = filedialog.askopenfilename(initialdir='audio/', title='Выберите трек', filetypes=(('mp3 Files', '*.mp3'), ))
+    song = filedialog.askopenfilename(initialdir='C:', title='Выберите трек', filetypes=(('mp3 Files', '*.mp3'), ))
 
     #song name without  directory path
     song = song.replace("C:/Users/Uzver-PC/PycharmProjects/pythonProject3/audio/", "")
@@ -85,7 +85,7 @@ def add_song():
 
 # add multiple songs function
 def add_multi_songs():
-    songs = filedialog.askopenfilenames(initialdir='audio/', title='Выберите треки', filetypes=(('mp3 Files', '*.mp3'),))
+    songs = filedialog.askopenfilenames(initialdir='C:', title='Выберите треки', filetypes=(('mp3 Files', '*.mp3'),))
 #directory and file info replace
     for song in songs:
         song = song.replace("C:/Users/Uzver-PC/PycharmProjects/pythonProject3/audio/", "")
@@ -101,7 +101,7 @@ def play():
     global stopped
     stopped = False
     song = playlist.get(ACTIVE)
-    song = f'C:/Users/Uzver-PC/PycharmProjects/pythonProject3/audio/{song}.mp3'
+    song = f'{song}.mp3'
 
     pygame.mixer.music.load(song)
     pygame.mixer.music.play(loops=0)
@@ -166,7 +166,7 @@ def next_track():
     next = playlist.curselection()
     next = next[0]+1
     song = playlist.get(next)
-    song = f'C:/Users/Uzver-PC/PycharmProjects/pythonProject3/audio/{song}.mp3'
+    song = f'{song}.mp3'
 
     pygame.mixer.music.load(song)
     pygame.mixer.music.play(loops=0)
@@ -184,7 +184,7 @@ def prev_track():
     prev = playlist.curselection()
     prev = prev[0] - 1
     song = playlist.get(prev)
-    song = f'C:/Users/Uzver-PC/PycharmProjects/pythonProject3/audio/{song}.mp3'
+    song = f'{song}.mp3'
 
     pygame.mixer.music.load(song)
     pygame.mixer.music.play(loops=0)
@@ -232,7 +232,7 @@ def pause(is_paused):
 def slide(x):
     #slider_label.config(text=f'{int(slider.get())} из {int(song_lenght)}')
     song = playlist.get(ACTIVE)
-    song = f'C:/Users/Uzver-PC/PycharmProjects/pythonProject3/audio/{song}.mp3'
+    song = f'{song}.mp3'
 
     pygame.mixer.music.load(song)
     pygame.mixer.music.play(loops=0, start=int(slider.get()))
@@ -274,11 +274,11 @@ playlist.grid(row=0, column=0)
 
 
 # Player buttons images
-next_btn_img = PhotoImage(file='icons/next.png')
-prev_btn_img = PhotoImage(file='icons/prev.png')
-stop_btn_img = PhotoImage(file='icons/stop.png')
-pause_btn_img = PhotoImage(file='icons/pause.png')
-play_btn_img = PhotoImage(file='icons/play.png')
+next_btn_img = PhotoImage(file='C:/Users/Uzver-PC/PycharmProjects/pythonProject3/icons/next.png')
+prev_btn_img = PhotoImage(file='C:/Users/Uzver-PC/PycharmProjects/pythonProject3/icons/prev.png')
+stop_btn_img = PhotoImage(file='C:/Users/Uzver-PC/PycharmProjects/pythonProject3/icons/stop.png')
+pause_btn_img = PhotoImage(file='C:/Users/Uzver-PC/PycharmProjects/pythonProject3/icons/pause.png')
+play_btn_img = PhotoImage(file='C:/Users/Uzver-PC/PycharmProjects/pythonProject3/icons/play.png')
 
 # Volume slider level images
 global vol0
@@ -286,11 +286,11 @@ global vol1
 global vol2
 global vol3
 global vol4
-vol0 = PhotoImage(file='icons/volume0.png')
-vol1 = PhotoImage(file='icons/volume1.png')
-vol2 = PhotoImage(file='icons/volume2.png')
-vol3 = PhotoImage(file='icons/volume3.png')
-vol4 = PhotoImage(file='icons/volume4.png')
+vol0 = PhotoImage(file='C:/Users/Uzver-PC/PycharmProjects/pythonProject3/icons/volume0.png')
+vol1 = PhotoImage(file='C:/Users/Uzver-PC/PycharmProjects/pythonProject3/icons/volume1.png')
+vol2 = PhotoImage(file='C:/Users/Uzver-PC/PycharmProjects/pythonProject3/icons/volume2.png')
+vol3 = PhotoImage(file='C:/Users/Uzver-PC/PycharmProjects/pythonProject3/icons/volume3.png')
+vol4 = PhotoImage(file='C:/Users/Uzver-PC/PycharmProjects/pythonProject3/icons/volume4.png')
 
 # Player control frame
 
